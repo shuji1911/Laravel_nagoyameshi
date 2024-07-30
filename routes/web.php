@@ -43,7 +43,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin
     Route::get('restaurants/{restaurant}', [RestaurantController::class, 'show'])->name('restaurants.show');
 
     // 店舗登録ページ
-    Route::get('restaurants', [RestaurantController::class, 'create'])->name('restaurants.create');
+    Route::get('restaurants/create', [RestaurantController::class, 'create'])->name('restaurants.create');
 
     // 店舗登録機能
     Route::post('restaurants', [RestaurantController::class, 'store'])->name('restaurants.store');
