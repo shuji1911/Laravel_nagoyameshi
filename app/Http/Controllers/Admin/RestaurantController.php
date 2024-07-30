@@ -33,9 +33,9 @@ class RestaurantController extends Controller
     }
 
     // 店舗登録ページ
-    public function create(Restaurant $restaurant)
+    public function create()
     {
-        return view('admin.restaurants.create', compact('restaurant'));
+        return view('admin.restaurants.create');
     }
 
     // 店舗登録機能
