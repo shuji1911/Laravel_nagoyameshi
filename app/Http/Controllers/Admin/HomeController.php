@@ -11,8 +11,8 @@ class HomeController extends Controller
     {
         // カテゴリの取得
         $categories = Category::all(); // 必要に応じて条件を指定
-
+    
         // ビューに渡す
-        return view('home', compact('categories'));
+        return view('admin/auth/home', compact('categories'));
     }
 }

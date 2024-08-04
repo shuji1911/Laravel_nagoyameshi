@@ -9,14 +9,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "fakerphp/faker": "^1.9.1",
         "guzzlehttp/guzzle": "^7.2",
-        "kyslik/column-sortable": "^6.4",
-        "laravel/cashier": "^14.2",
+        "kyslik/column-sortable": "^6.6",
+        "laravel/cashier": "^14.14",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "laravel/ui": "^4.0",
-        "fakerphp/faker": "^1.9.1"
+        "laravel/ui": "^4.0"
     },
     "require-dev": {
         "laravel/breeze": "^1.19",

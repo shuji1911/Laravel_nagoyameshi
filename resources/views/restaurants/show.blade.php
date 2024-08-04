@@ -1,143 +1,161 @@
 @extends('layouts.app')
 
-@section('content')     
-    <div class="container">
-        <h1 class="mb-3">{{ $restaurant->name }}</h1>       
-        
-        @if (session('flash_message')) 
-            <div>
-                <p class="text-success">{{ session('flash_message') }}</p>                    
-            </div>                                   
-        @endif   
-        
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
+@section('content')
+    <div class="container nagoyameshi-container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-xxl-6 col-xl-7 col-lg-8 col-md-10">
+                <nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">ホーム</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('restaurants.index') }}">店舗一覧</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">店舗詳細</li>
+                    </ol>
+                </nav>
+
+                <h1 class="mb-2 text-center">{{ $restaurant->name }}</h1>
+
+                @if (session('flash_message'))
+                    <div class="alert alert-info" role="alert">
+                        <p class="mb-0">{{ session('flash_message') }}</p>
+                    </div>
+                @endif
+
+                <ul class="nav nav-tabs mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link active text-white nagoyameshi-bg" aria-current="page" href="{{ route('restaurants.show', $restaurant) }}">トップ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link link-dark" href="#">予約</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link link-dark" href="#">レビュー</a>
+                    </li>
                 </ul>
-            </div>
-        @endif         
 
-        <div class="mb-3">
-            <a href="{{ route('restaurants.index') }}">< 戻る</a>     
-        </div>
-        
-        <div class="container p-0 mb-4">
-            <div class="row g-3">
-                <div class="col-12 col-lg-4">
-                    <img src="{{ asset('storage/restaurants/' . $restaurant->image) }}" class="w-100">
+                <div class="mb-2">
+                    @if ($restaurant->image !== '')
+                        <img src="{{ asset('storage/restaurants/' . $restaurant->image) }}" class="w-100">
+                    @else
+                        <img src="{{ asset('/images/no_image.jpg') }}" class="w-100">
+                    @endif
                 </div>
-                <div class="col">
-                    <div class="border-bottom mb-2">
-                        <p class="mb-2"><span class="fw-bold">カテゴリ：</span>{{ $restaurant->category->name }}　<span class="fw-bold">平均評価：</span><span class="text-warning">{{ str_repeat('★', round($restaurant->reviews()->avg('score'))) }}</span></p>
-                    </div>
-                    <div class="border-bottom mb-2">
-                        <p class="mb-2"><span class="fw-bold">予算：</span>{{ $restaurant->lowest_price }}円～{{ $restaurant->highest_price }}円</p>
-                    </div>      
-                    <div class="border-bottom mb-2">
-                        <p class="mb-2"><span class="fw-bold">営業時間：</span>{{ date('G:i', strtotime($restaurant->opening_time)) . '～' . date('G:i', strtotime($restaurant->closing_time)) }}　<span class="fw-bold">定休日：</span>{{ $restaurant->regular_holiday }}</p>
-                    </div>                                   
-                    <div class="border-bottom mb-2">
-                        <p class="mb-2">{{ $restaurant->description }}</p>
-                    </div>
-                    <div class="border-bottom mb-2">
-                        <p class="mb-2"><span class="fw-bold">住所：</span>〒{{ $restaurant->postal_code }}　{{ $restaurant->address }}</p>
-                    </div>                    
-                </div>
-            </div>
-        </div> 
 
-        <div>
-            <h2 class="mb-3">予約</h2>                   
-            
-            
-                <form method="POST" action="{{ route('restaurants.reservations.store', $restaurant) }}" class="mb-4">
-                    @csrf       
-
-                    <div class="d-flex flex-wrap align-items-end">
-                        <input type="hidden" name="restaurant_id", value="{{ $restaurant->id }}">
-                        <div class="form-group me-2  mb-2">
-                            <label for="reservation_date" class="form-label text-md-left fw-bold">予約日</label>
-
-                            <div>
-                                <select class="form-control form-select resevation-select" id="reservation_date" name="reservation_date" required>
-                                    <option value="">選択してください</option>
-                                    @for ($i = 0; $i <= 14; $i++)
-                                    @if (date('Y-m-d', strtotime($reservation_start_date . "+{$i} day")) == old('reservation_date'))
-                                        <option value="{{ date('Y-m-d', strtotime($reservation_start_date . "+{$i} day")) }}" selected>{{ date('Y-m-d', strtotime($reservation_start_date . "+{$i} day")) }}</option>
-                                    @else
-                                        <option value="{{ date('Y-m-d', strtotime($reservation_start_date . "+{$i} day")) }}">{{ date('Y-m-d', strtotime($reservation_start_date . "+{$i} day")) }}</option>
-                                    @endif
-                                    @endfor
-                                </select>                                     
-                            </div>
+                <div class="container">
+                    <div class="row pb-2 mb-2 border-bottom">
+                        <div class="col-2">
+                            <span class="fw-bold">店舗名</span>
                         </div>
 
-                        <div class="form-group me-2 mb-2">
-                            <label for="reservation_time" class="form-label text-md-left fw-bold">予約時間</label>
+                        <div class="col">
+                            <span>{{ $restaurant->name }}</span>
+                        </div>
+                    </div>
 
-                            <div>
-                                <select class="form-control form-select resevation-select" id="reservation_time" name="reservation_time" required>
-                                    <option value="">選択してください</option>
-                                    @for ($i = 0; $i <= (strtotime($reservation_end_time) - strtotime($reservation_start_time)) / 60 / $time_unit; $i++)
-                                        {{ $reservation_time = date('H:i', strtotime($reservation_start_time . '+' . $i * $time_unit . 'minute')) }}
-                                        @if ($reservation_time == old('reservation_time'))
-                                            <option value="{{ $reservation_time }}" selected>{{ $reservation_time }}</option>
+                    <div class="row pb-2 mb-2 border-bottom">
+                        <div class="col-2">
+                            <span class="fw-bold">説明</span>
+                        </div>
+
+                        <div class="col">
+                            <span>{{ $restaurant->description }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row pb-2 mb-2 border-bottom">
+                        <div class="col-2">
+                            <span class="fw-bold">価格帯</span>
+                        </div>
+
+                        <div class="col">
+                            <span>{{ number_format($restaurant->lowest_price) }}円～{{ number_format($restaurant->highest_price) }}円</span>
+                        </div>
+                    </div>
+
+                    <div class="row pb-2 mb-2 border-bottom">
+                        <div class="col-2">
+                            <span class="fw-bold">郵便番号</span>
+                        </div>
+
+                        <div class="col">
+                            <span>{{ substr($restaurant->postal_code, 0, 3) . '-' . substr($restaurant->postal_code, 3) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row pb-2 mb-2 border-bottom">
+                        <div class="col-2">
+                            <span class="fw-bold">住所</span>
+                        </div>
+
+                        <div class="col">
+                            <span>{{ $restaurant->address }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row pb-2 mb-2 border-bottom">
+                        <div class="col-2">
+                            <span class="fw-bold">営業時間</span>
+                        </div>
+
+                        <div class="col">
+                            <span>{{ date('G:i', strtotime($restaurant->opening_time)) . '～' . date('G:i', strtotime($restaurant->closing_time)) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row pb-2 mb-2 border-bottom">
+                        <div class="col-2">
+                            <span class="fw-bold">定休日</span>
+                        </div>
+
+                        <div class="col d-flex">
+                            @if ($restaurant->regularHolidays()->exists())
+                                @foreach ($restaurant->regular_holidays()->orderBy('regular_holiday_id', 'asc')->get() as $index => $regular_holiday)
+                                    <div>
+                                        @if ($index === 0)
+                                            {{ $regular_holiday->day }}
                                         @else
-                                            <option value="{{ $reservation_time }}">{{ $reservation_time }}</option>
+                                            {{ '、' . $regular_holiday->day }}
                                         @endif
-                                    @endfor                                                        
-                                </select>                             
-                            </div>
-                        </div>                    
-                        
-                        <div class="form-group me-2 mb-2">
-                            <label for="number_of_people" class="form-label text-md-left fw-bold">予約人数</label>
-
-                            <div>
-                                <select class="form-control form-select resevation-select" id="number_of_people" name="number_of_people" required>
-                                    <option value="">選択してください</option>
-                                    @for ($i = 1; $i <=30; $i++)
-                                        <option value="{{ $i }}">{{ $i }}名</option>
-                                    @endfor 
-                                </select>
-                            </div>
-                        </div>                     
-                        
-                        <button type="submit" class="btn btn-primary shadow-sm mb-2">予約</button>                    
-                    </div> 
-                </form>           
-        </div>        
-        
-        <div>
-            <h2 class="mb-3">レビュー一覧</h2>    
-
-            <div class="mb-3">
-                <a href="{{ route('restaurants.reviews.create', $restaurant) }}" class="btn btn-primary shadow-sm">レビュー投稿</a>                
-            </div>
-
-            @foreach ($reviews as $review)
-                <div class="border-bottom mb-3">
-                    <h3>{{ $review->user->name }}</h3>
-                    <p class="text-warning">{{ str_repeat('★', $review->score) }}</p>
-                    <p>{{ $review->comment }}</p>
-                    @if ($review->user->id == Auth::id())
-                        <div class="d-flex mb-3">
-                            <a href="{{ route('restaurants.reviews.edit', [$restaurant, $review]) }}" class="btn btn-primary shadow-sm me-2">編集</a>      
-                            <form action="{{ route('restaurants.reviews.destroy', [$restaurant, $review]) }}" method="post">
-                                @csrf
-                                @method('delete')
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('削除してもよいですか？');">削除</button>
-                            </form>                                                
+                                    </div>
+                                @endforeach
+                            @else
+                                <span>年中無休</span>
+                            @endif
                         </div>
-                    @endif                    
+                    </div>
+
+                    <div class="row pb-2 mb-2 border-bottom">
+                        <div class="col-2">
+                            <span class="fw-bold">座席数</span>
+                        </div>
+
+                        <div class="col">
+                            <span>{{ number_format($restaurant->seating_capacity) }}席</span>
+                        </div>
+                    </div>
+
+                    <div class="row pb-2 mb-4 border-bottom">
+                        <div class="col-2">
+                            <span class="fw-bold">カテゴリ</span>
+                        </div>
+
+                        <div class="col d-flex">
+                            @if ($restaurant->categories()->exists())
+                                @foreach ($restaurant->categories as $index => $category)
+                                    <div>
+                                        @if ($index === 0)
+                                            {{ $category->name }}
+                                        @else
+                                            {{ '、' . $category->name }}
+                                        @endif
+                                    </div>
+                                @endforeach
+                            @else
+                                <span>未設定</span>
+                            @endif
+                        </div>
+                    </div>
                 </div>
-            @endforeach 
-            <div>
-                {{ $reviews->links() }}
-            </div>                       
+            </div>
         </div>
-    </div>                                                                                                                                                            
+    </div>
 @endsection
