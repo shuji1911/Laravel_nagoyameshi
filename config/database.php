@@ -76,6 +76,9 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => 'prefer',
+            'options' => [
+                'charset' => 'utf8' // ここを追加します
+            ],
         ],
         
 
