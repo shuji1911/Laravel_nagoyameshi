@@ -35,6 +35,7 @@ class Kernel extends HttpKernel {
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            
         ],
 
         'api' => [
@@ -64,5 +65,10 @@ class Kernel extends HttpKernel {
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin.auth' => \App\Http\Middleware\AdminAuthenticate::class,
         'subscribed' => \App\Http\Middleware\EnsureUserIsSubscribed::class,
+        'subscribed' => \App\Http\Middleware\Subscribed::class,
+        'not_subscribed' => \App\Http\Middleware\NotSubscribed::class,
+        'subscribed' => \App\Http\Middleware\CheckSubscription::class,
+    'not_subscribed' => \App\Http\Middleware\CheckNotSubscribed::class,
+    'not_admin' => \App\Http\Middleware\CheckNotAdmin::class,
     ];
 }

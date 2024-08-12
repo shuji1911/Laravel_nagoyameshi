@@ -25,7 +25,9 @@ class TermController extends Controller
             'content' => 'required',
         ]);
 
-        $term->update($validated);
+         // データの取得と更新
+         $term = Term::first();
+         $term->update($request->only('content'));
 
         return redirect()->route('admin.terms.index')->with('flash_message', '利用規約を編集しました。');
     }

@@ -10,19 +10,19 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $highly_rated_restaurants = Restaurant::with('reviews')
-            ->selectRaw('restaurants.*, AVG(reviews.score) as reviews_avg_score')
-            ->leftJoin('reviews', 'restaurants.id', '=', 'reviews.restaurant_id')
-            ->groupBy('restaurants.id')
+        // 評価が高い店舗を取得
+        $highly_rated_restaurants = Restaurant::withAvg('reviews', 'score')
             ->orderBy('reviews_avg_score', 'desc')
             ->take(6)
             ->get();
-        
+
+        // 最新の店舗を取得
         $new_restaurants = Restaurant::orderBy('created_at', 'desc')->take(6)->get();
+
+        // 全カテゴリを取得
         $categories = Category::all();
 
-        
-
+        // ビューに変数を渡す
         return view('home', [
             'highly_rated_restaurants' => $highly_rated_restaurants,
             'categories' => $categories,
@@ -30,4 +30,3 @@ class HomeController extends Controller
         ]);
     }
 }
-

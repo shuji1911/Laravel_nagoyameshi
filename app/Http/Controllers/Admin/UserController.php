@@ -20,11 +20,9 @@ class UserController extends Controller
         $usersQuery = User::query();
 
         if (!empty($keyword)) {
-            $usersQuery->where(function ($query) use ($keyword) {
-                $query->where('name', 'like', '%' . $keyword . '%')
-                      ->orWhere('ruby', 'like', '%' . $keyword . '%');
-            });
+            $usersQuery->where('name', 'like', '%' . $keyword . '%');
         }
+
 
         $users = $usersQuery->paginate(10);
         $total = $users->total();

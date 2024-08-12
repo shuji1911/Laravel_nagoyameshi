@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReviewsTable extends Migration
+class CreateRestaurantUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateReviewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('reviews', function (Blueprint $table) {
+        Schema::create('restaurant_user', function (Blueprint $table) {
             $table->id(); // ID
-            $table->text('content'); // レビュー内容
-            $table->unsignedInteger('score'); // スコア（星の数）
             $table->foreignId('restaurant_id') // 店舗のID
                   ->constrained()
                   ->cascadeOnDelete();
@@ -34,6 +32,6 @@ class CreateReviewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('restaurant_user');
     }
 }

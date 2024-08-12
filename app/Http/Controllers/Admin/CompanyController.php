@@ -32,7 +32,9 @@ class CompanyController extends Controller
             'number_of_employees' => 'required',
         ]);
 
-        $company->update($validated);
+        // データの取得と更新
+        $company = Company::first();
+        $company->update($request->all());
 
         return redirect()->route('admin.company.index')->with('flash_message', '会社概要を編集しました。');
     }

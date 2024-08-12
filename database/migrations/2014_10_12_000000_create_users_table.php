@@ -25,6 +25,11 @@ return new class extends Migration {
             $table->string('occupation')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->string('stripe_id')->nullable();
+            $table->string('stripe_secret')->nullable();
+            $table->string('stripe_plan')->nullable();
+            $table->timestamp('trial_ends_at')->nullable();
+            $table->timestamp('subscription_ends_at')->nullable();
         });
     }
 
@@ -33,7 +38,8 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function down() {
+    public function down()
+    {
         Schema::dropIfExists('users');
     }
 };

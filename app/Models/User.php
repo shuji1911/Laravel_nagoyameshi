@@ -9,7 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Cashier\Billable;
 
-class User extends Authenticatable implements MustVerifyEmail {
+class User extends Authenticatable implements MustVerifyEmail
+{
     use HasApiTokens, HasFactory, Notifiable, Billable;
 
     /**
@@ -20,8 +21,8 @@ class User extends Authenticatable implements MustVerifyEmail {
     protected $fillable = [
         'name',
         'kana',
-       'email',
-       'password',
+        'email',
+        'password',
         'postal_code',
         'address',
         'phone_number',
@@ -48,12 +49,26 @@ class User extends Authenticatable implements MustVerifyEmail {
         'email_verified_at' => 'datetime',
     ];
 
-    public function reviews() {
+    // レビューとのリレーション
+    public function reviews()
+    {
         return $this->hasMany(Review::class);
     }
 
-    public function reservations() {
+    // 予約とのリレーション
+    public function reservations()
+    {
         return $this->hasMany(Reservation::class);
     }
-    
+    public function favorite_restaurants()
+    {
+        return $this->belongsToMany(Restaurant::class, 'restaurant_user')
+        ->withTimestamps();
+    }
+    public function restaurants()
+{
+    return $this->belongsToMany(Restaurant::class, 'restaurant_user')
+        ->withTimestamps();
+}
+
 }

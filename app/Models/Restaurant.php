@@ -27,7 +27,7 @@ class Restaurant extends Model
     // テーブル名
     protected $table = 'restaurants';
 
-
+    // タイムスタンプを使用する
     public $timestamps = true;
 
     // 定休日との多対多リレーション
@@ -55,11 +55,26 @@ class Restaurant extends Model
     }
 
     // ソート可能なカラムの定義
-    public $sortable = ['lowest_price', 'highest_price'];
+    public $sortable = ['lowest_price', 'highest_price', 'rating'];
 
     // ソート機能のカスタマイズ
-    public function scoreSortable($query, $direction)
+    public function scopeRatingSortable($query, $direction)
     {
-        return $query->orderBy('reviews_avg_score', $direction);
+        return $query->leftJoin('reviews', 'restaurants.id', '=', 'reviews.restaurant_id')
+                     ->select('restaurants.*', \DB::raw('AVG(reviews.score) as reviews_avg_score'))
+                     ->groupBy('restaurants.id')
+                     ->orderBy('reviews_avg_score', $direction);
+    
+    }
+    public function scopePopularSortable($query)
+    {
+        return $query->withCount('reservations')
+                     ->orderBy('reservations_count', 'desc');
+    }
+    // 多対多のリレーションシップを定義
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'restaurant_user')
+        ->withTimestamps();
     }
 }

@@ -86,8 +86,8 @@ class RestaurantController extends Controller
     $restaurant->save();
 
     // カテゴリIDの取得とフィルタリング
-    $category_ids = array_filter($request->input('category_ids'));
-    $regular_holiday_ids = array_filter($request->input('regular_holiday_ids'));
+    $category_ids = array_filter($request->input('category_ids', []));
+    $regular_holiday_ids = array_filter($request->input('regular_holiday_ids', []));
 
     // 中間テーブルにカテゴリと定休日を同期
     $restaurant->categories()->sync($category_ids);
@@ -128,7 +128,7 @@ class RestaurantController extends Controller
             'opening_time' => 'required|date_format:H:i|before:closing_time',
             'closing_time' => 'required|date_format:H:i|after:opening_time',
             'seating_capacity' => 'required|numeric|min:0',
-            'category_ids' => 'nullable|array', // 配列が null でも許可
+            'category_ids' => 'nullable|array', // 配列が null　でも可
             'category_ids.*' => 'integer|exists:categories,id',
             'regular_holiday_ids' => 'nullable|array', // 配列が null でも許可
             'regular_holiday_ids.*' => 'integer|exists:regular_holidays,id',
