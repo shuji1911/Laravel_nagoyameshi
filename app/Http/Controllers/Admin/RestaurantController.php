@@ -108,7 +108,7 @@ class RestaurantController extends Controller
     // 店舗に設定されたカテゴリIDの取得
     $category_ids = $restaurant->categories->pluck('id')->toArray();
     // 店舗に設定された定休日IDの取得
-    $regular_holiday_ids = $restaurant->regularHolidays->pluck('id')->toArray();
+    $regular_holiday_ids = $restaurant->regular_holidays->pluck('id')->toArray();
 
     // ビューにデータを渡して表示
     return view('admin.restaurants.edit', compact('restaurant', 'categories', 'regular_holidays', 'category_ids', 'regular_holiday_ids'));
@@ -163,7 +163,7 @@ class RestaurantController extends Controller
     
         // 中間テーブルにカテゴリと定休日を同期
         $restaurant->categories()->sync($category_ids);
-        $restaurant->regularHolidays()->sync($regular_holiday_ids);
+        $restaurant->regular_holidays()->sync($regular_holiday_ids);
     
         return redirect()->route('admin.restaurants.show', $restaurant)
             ->with('flash_message', '店舗を編集しました。');

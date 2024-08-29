@@ -107,7 +107,7 @@
                         </div>
 
                         <div class="col d-flex">
-                            @if ($restaurant->regularHolidays()->exists())
+                            @if ($restaurant->regular_holidays()->exists())
                                 @foreach ($restaurant->regular_holidays()->orderBy('regular_holiday_id', 'asc')->get() as $index => $regular_holiday)
                                     <div>
                                         @if ($index === 0)

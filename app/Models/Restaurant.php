@@ -31,7 +31,7 @@ class Restaurant extends Model
     public $timestamps = true;
 
     // 定休日との多対多リレーション
-    public function regularHolidays()
+    public function regular_holidays()
     {
         return $this->belongsToMany(RegularHoliday::class, 'regular_holiday_restaurant');
     }

@@ -158,7 +158,7 @@
                         <div class="col-md-7 d-flex flex-wrap">
                             @foreach ($regular_holidays as $index => $regular_holiday)
                                 <div class="form-check d-flex align-items-center me-3">
-                                    @if ($restaurant->regularHolidays()->where('regular_holiday_id', $regular_holiday->id)->exists())
+                                    @if ($restaurant->regular_holidays()->where('regular_holiday_id', $regular_holiday->id)->exists())
                                         <input type="checkbox" class="form-check-input" id="regularHoliday{{ $index }}" name="regular_holiday_ids[]" value="{{ $regular_holiday->id }}" checked>
                                     @else
                                         <input type="checkbox" class="form-check-input" id="regularHoliday{{ $index }}" name="regular_holiday_ids[]" value="{{ $regular_holiday->id }}">
