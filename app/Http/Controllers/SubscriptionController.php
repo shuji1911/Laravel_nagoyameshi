@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Stripe\StripeClient;
 use Stripe\Exception\CardException;
 
 class SubscriptionController extends Controller {
