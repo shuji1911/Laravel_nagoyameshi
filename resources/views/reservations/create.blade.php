@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
     <script>
         // JavaScriptに変数（その店舗の定休日のday_indexカラム値の配列）を渡す
-        const restaurantRegularHolidays = @json($restaurant->regular_holidays()->pluck('day_index'));
+        const restaurantRegularHolidays = @json($restaurant->regular_Holidays()->pluck('day_index'));
     </script>
     <script src="{{ asset('/js/flatpickr.js') }}"></script>
 @endpush
