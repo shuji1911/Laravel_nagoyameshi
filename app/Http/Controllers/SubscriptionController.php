@@ -42,15 +42,38 @@ class SubscriptionController extends Controller {
         $request->validate([
             'paymentMethodId' => 'required|string',
         ]);
-
+    
+        $user = Auth::user();
+        $paymentMethodId = $request->input('paymentMethodId');
+    
+        $stripe = new StripeClient(env('STRIPE_SECRET')); // Stripeクライアントを初期化
+    
         try {
-            $request->user()->updateDefaultPaymentMethod($request->paymentMethodId);
+            // StripeのCustomerを更新
+            $stripe->customers->update($user->stripe_id, [
+                'invoice_settings' => [
+                    'default_payment_method' => $paymentMethodId,
+                ],
+            ]);
         } catch (CardException $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
-
+    
         return redirect()->route('home')->with('flash_message', 'クレジットカード情報を編集しました。');
     }
+    // public function update(Request $request) {
+    //     $request->validate([
+    //         'paymentMethodId' => 'required|string',
+    //     ]);
+
+    //     try {
+    //         $request->user()->updateDefaultPaymentMethod($request->paymentMethodId);
+    //     } catch (CardException $e) {
+    //         return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+    //     }
+
+    //     return redirect()->route('home')->with('flash_message', 'クレジットカード情報を編集しました。');
+    // }
 
     public function cancel() {
         return view('subscription.cancel');

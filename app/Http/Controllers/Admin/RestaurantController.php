@@ -91,7 +91,7 @@ class RestaurantController extends Controller
 
     // 中間テーブルにカテゴリと定休日を同期
     $restaurant->categories()->sync($category_ids);
-    $restaurant->regularHolidays()->sync($regular_holiday_ids);
+    $restaurant->regular_holidays()->sync($regular_holiday_ids);
 
     return redirect()->route('admin.restaurants.index')
         ->with('flash_message', '店舗を登録しました。');
