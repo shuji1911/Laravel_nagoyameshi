@@ -1,7 +1,5 @@
-const stripe = Stripe(pk_test_51PjzMVCzyQSNFj3Nx12ZSvh5Tnd0oqU29zpPFDedu79aXdSOPT7p2TNobI6YaD9wYEeMeOiWSbPS8hE15YH95jNK00wAg1sPfP);
+const stripe = Stripe('pk_test_51PjzMVCzyQSNFj3Nx12ZSvh5Tnd0oqU29zpPFDedu79aXdSOPT7p2TNobI6YaD9wYEeMeOiWSbPS8hE15YH95jNK00wAg1sPfP');
 
-const elements = stripe.elements();
-const cardElement = elements.create('card');
 cardElement.mount('#card-element');
 
 const cardHolderName = document.getElementById('card-holder-name');
